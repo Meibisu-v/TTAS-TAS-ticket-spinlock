@@ -26,7 +26,6 @@ void spinlock_TAS::unlock()
 
 void spinlock_TTAS::lock()
 {
-    // size_t max_time = 6553;
     uint8_t expected_zero;
     do
     {
@@ -40,9 +39,8 @@ void spinlock_TTAS::lock()
             if (thread_count > sysconf(_SC_NPROCESSORS_ONLN)*50) {
                 sleep(timer);
                 timer = timer << 1;
-                // timer = std::min(max_time, timer<<1);
             } else {
-                __asm volatile ("pause" ::: "memory");
+                __asm volatile ("pause");
                 // sched_yield();
             }
         }
